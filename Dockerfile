@@ -43,31 +43,11 @@ ADD src/extra_model_paths.yaml ./
 WORKDIR /
 
 # Add scripts
-ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
+ADD src/start.sh src/rp_handler.py test_input.json ./
 RUN chmod +x /start.sh /restore_snapshot.sh
 
-# Optionally copy the snapshot file
+# Optionally copy the snapshot file, if necessary
 ADD *snapshot*.json /
-
-# Restore the snapshot to install custom nodes
-RUN /restore_snapshot.sh
-
-# Start container
-CMD ["/start.sh"]
-
-FROM base as stage2
-
-ARG HUGGINGFACE_ACCESS_TOKEN
-ARG MODEL_TYPE
-
-# Change working directory to ComfyUI
-WORKDIR /comfyui
-
-# Create necessary directories
-RUN mkdir -p models/checkpoints  models/clip  models/clip_vision  models/controlnet  models/depthanything  models/diffusers  models/diffusion_models  models/insightface  models/loras  models/pulid  models/unet  models/vae
-
-# Copy models from storage volume (workspace/models) to the container's ComfyUI models directory
-COPY /workspace/models /comfyui/models
 
 # Start container
 CMD ["/start.sh"]
