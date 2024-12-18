@@ -6,7 +6,7 @@ export LD_PRELOAD="${TCMALLOC}"
 
 # Restaurar snapshot, se necessário
 echo "Restaurando snapshot..."
-/src/restore_snapshot.sh
+/restore_snapshot.sh
 
 # Copiar modelos do workspace para o diretório de modelos do ComfyUI
 echo "Copiando modelos..."
