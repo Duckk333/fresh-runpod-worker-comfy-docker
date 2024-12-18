@@ -30,8 +30,6 @@ RUN pip install comfy-cli
 # Install ComfyUI
 RUN /usr/bin/yes | comfy --workspace /comfyui install --cuda-version 11.8 --nvidia --version 0.2.7
 
-RUN /restore_snapshot.sh
-
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
@@ -47,6 +45,8 @@ WORKDIR /
 # Add scripts
 ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
 RUN chmod +x /start.sh /restore_snapshot.sh
+
+RUN /restore_snapshot.sh
 
 # Optionally copy the snapshot file, if necessary
 ADD *snapshot*.json /
