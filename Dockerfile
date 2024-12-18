@@ -37,6 +37,9 @@ WORKDIR /comfyui
 ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
 RUN chmod +x /start.sh /restore_snapshot.sh
 
+#copy snapshot
+ADD *snapshot*.json /
+
 RUN /restore_snapshot.sh
 
 # Install runpod
