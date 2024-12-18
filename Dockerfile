@@ -33,6 +33,12 @@ RUN /usr/bin/yes | comfy --workspace /comfyui install --cuda-version 11.8 --nvid
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
+# Add scripts
+ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
+RUN chmod +x /start.sh /restore_snapshot.sh
+
+RUN /restore_snapshot.sh
+
 # Install runpod
 RUN pip install runpod requests
 
@@ -41,12 +47,6 @@ ADD src/extra_model_paths.yaml ./
 
 # Go back to the root
 WORKDIR /
-
-# Add scripts
-ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
-RUN chmod +x /start.sh /restore_snapshot.sh
-
-RUN /restore_snapshot.sh
 
 # Optionally copy the snapshot file, if necessary
 ADD *snapshot*.json /
