@@ -6,7 +6,7 @@ export LD_PRELOAD="${TCMALLOC}"
 
 # Copy models from workspace to ComfyUI models directory
 echo "Copying models..."
-cp -r /workspace/models/* /comfyui/models/
+cp -r /runpod-volume/models/* /comfyui/models/
 
 # Serve the API and don't shutdown the container
 if [ "$SERVE_API_LOCALLY" == "true" ]; then
