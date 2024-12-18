@@ -33,15 +33,6 @@ RUN /usr/bin/yes | comfy --workspace /comfyui install --cuda-version 11.8 --nvid
 # Change working directory to ComfyUI
 WORKDIR /comfyui
 
-# Add scripts
-ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
-RUN chmod +x /start.sh /restore_snapshot.sh
-
-#copy snapshot
-ADD *snapshot*.json /
-
-RUN /restore_snapshot.sh
-
 # Install runpod
 RUN pip install runpod requests
 
@@ -51,8 +42,30 @@ ADD src/extra_model_paths.yaml ./
 # Go back to the root
 WORKDIR /
 
-# Optionally copy the snapshot file, if necessary
+# Add scripts
+ADD src/start.sh src/restore_snapshot.sh src/rp_handler.py test_input.json ./
+RUN chmod +x /start.sh /restore_snapshot.sh
+
+# Optionally copy the snapshot file
 ADD *snapshot*.json /
+
+# Restore the snapshot to install custom nodes
+RUN /restore_snapshot.sh
+
+# Start container
+CMD ["/start.sh"]
+
+FROM base as stage2
+
+ARG HUGGINGFACE_ACCESS_TOKEN
+ARG MODEL_TYPE
+
+# Change working directory to ComfyUI
+WORKDIR /comfyui
+
+# Create necessary directories
+RUN mkdir -p models/checkpoints  models/clip  models/clip_vision  models/controlnet  models/depthanything  models/diffusers  models/diffusion_models  models/insightface  models/loras  models/pulid  models/unet  models/vae
+
 
 # Start container
 CMD ["/start.sh"]
