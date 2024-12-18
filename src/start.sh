@@ -4,12 +4,8 @@
 TCMALLOC="$(ldconfig -p | grep -Po "libtcmalloc.so.\d" | head -n 1)"
 export LD_PRELOAD="${TCMALLOC}"
 
-# Restaurar snapshot, se necessário
-echo "Restaurando snapshot..."
-/restore_snapshot.sh
-
-# Copiar modelos do workspace para o diretório de modelos do ComfyUI
-echo "Copiando modelos..."
+# Copy models from workspace to ComfyUI models directory
+echo "Copying models..."
 cp -r /workspace/models/* /comfyui/models/
 
 # Serve the API and don't shutdown the container
